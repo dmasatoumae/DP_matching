@@ -1,7 +1,7 @@
 import numpy as np
 #import pdb
-Tem_file_name = "./city011/city011_"
-Tar_file_name = "./city021/city021_"
+Tem_file_name = "./city021/city021_"
+Tar_file_name = "./city022/city022_"
 
 #array[file][frame][dimention] read file
 def read_file(file_name):
@@ -55,6 +55,7 @@ def DP_matching(d):
     #DPマッチング
     for j in range(1,gyou):
             for i in range(1,retsu):
+                #dに上書きしているがgの行列
                 d[j][i]=min([d[j][i-1]+d[j][i],d[j-1][i-1]+(d[j][i])*2,d[j-1][i]+d[j][i]])
     #pdb.set_trace()
     #単語間距離の計算
@@ -81,7 +82,7 @@ def accuracy(Temp,Targ):
             d=Local_distance(Temp[Temp100],Targ[Targ100])
 
             #DPの関数
-            d,wd=DP_matching(d)
+            g,wd=DP_matching(d)
 
             #if 今回の単語間距離＜今までで一番小さい単語間距離
             if wd<bwd:
@@ -92,17 +93,19 @@ def accuracy(Temp,Targ):
 
         #正解判断
         if handan_num==Temp100:
-            print('O')
+            print("O",end=' ')
             accuracy+=1
         else:
-            print('X')
+            print("X",end=' ')
     #正解率を出力
-    print("accuracy=",accuracy)
+    print("\n","accuracy=",accuracy)
 
 
 def main():
     Temp = read_file(Tem_file_name)
     Targ = read_file(Tar_file_name)
+    print("Template file name = ",Tem_file_name)
+    print("Target file name = ",Tar_file_name)
     accuracy(Temp,Targ)
 
 if __name__ == '__main__':
