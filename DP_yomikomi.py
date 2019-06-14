@@ -1,4 +1,5 @@
 import numpy as np
+
 Tem_file_name = "./city011/city011_"
 Tar_file_name = "./city021/city021_"
 
@@ -31,17 +32,43 @@ def Local_distance(Temp,Targ):
                 rootmae+=((Temp[i][k]-Targ[j][k])**2)
             d[i][j]=np.sqrt(rootmae)
     return d
-                
+
+def DP_matching(d):
+    #boundary condition
+    gyou,retsu=d.shape
+    for i in range(retsu):
+        if(i>0):
+            d[0][i]=d[0][i-1]+d[0][i]
+    for j in range(gyou):
+        if(j>0):
+            d[j][0]=d[j-1][0]+d[j][0]
+    #DP
+    for j in range(1,gyou):
+            
+            for i in range(1,retsu):
+
+                d[j][i]=min([d[j][i-1]+d[j][i],d[j-1][i-1]+(d[j][i])*2,d[j-1][i]+d[j][i]])
+    word_distance=(d[gyou-1][retsu-1])/(gyou+retsu)
+    return d,word_distance
+
+def accuracy(Temp,Targ):
+    for Temp100 in range(100):
+        for Targ100 in range(100):
+            d=Local_distance(Temp[Temp100],Targ[Targ100])
+            d,wd=DP_matching(d)
+
+
 
 
 def main():
     Temp = read_file(Tem_file_name)
     Targ = read_file(Tar_file_name)
-    print(Targ[2][0][1])
     #for file in range (100):
     d=Local_distance(Temp[1],Targ[1])
+    d,wd=DP_matching(d)
+    i,j=d.shape
     print(d.shape)
-    print(d)
+    print(wd)
 
 if __name__ == '__main__':
     main() 
