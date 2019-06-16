@@ -1,7 +1,7 @@
 import numpy as np
 #import pdb
-Tem_file_name = "./city021/city021_"
-Tar_file_name = "./city022/city022_"
+Tem_file_name = "./city022/city022_"
+Tar_file_name = "./city021/city021_"
 
 #array[file][frame][dimention] read file
 def read_file(file_name):
@@ -93,13 +93,21 @@ def accuracy(Temp,Targ):
 
         #正解判断
         if handan_num==Temp100:
-            print("O",end=' ')
             accuracy+=1
         else:
-            print("X",end=' ')
+            print(Temp100+1,"番、不正解",handan_num+1,"と誤認")
+
     #正解率を出力
     print("\n","accuracy=",accuracy)
-
+def pinpointTem(TempNumber,Temp,Targ):
+    bwd=1000
+    for Targ100 in range(100):
+        d=Local_distance(Temp[TempNumber],Targ[Targ100])
+        g,wd=DP_matching(d)
+        if wd<bwd:
+            bwd=wd
+            handan=Targ100
+    print(handan,bwd)
 
 def main():
     Temp = read_file(Tem_file_name)
